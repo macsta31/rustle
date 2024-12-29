@@ -71,11 +71,22 @@ fn main() {
         guess = guess.trim().to_string();
 
         // Erase the user input from the terminal
-        print!("\x1B[1A"); // Move the cursor up by one line
-        print!("\x1B[2K"); // Clear the entire line
+        clear_previous_line();
 
         if guess.len() != 5 {
+            println!("{}", "5 letter words".red());
+            thread::sleep(std::time::Duration::from_millis(500));
+            clear_previous_line();
             continue;
+        }
+
+        if !guess.chars().all(|c| c.is_alphabetic()) {
+            println!("{}", "Only letters allowed".red());
+            thread::sleep(std::time::Duration::from_millis(500));
+            clear_previous_line();
+
+
+            continue
         }
 
         for (i, c) in guess.chars().enumerate() {
@@ -100,4 +111,10 @@ fn main() {
     }
 
     println!("You lose!");
+}
+
+
+fn clear_previous_line() {
+    print!("\x1B[1A"); // Move the cursor up by one line
+    print!("\x1B[2K"); // Clear the entire line
 }
